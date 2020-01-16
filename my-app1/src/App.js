@@ -63,13 +63,31 @@ class App extends Component {
   // if state changes, DOM is re-rendered.
   state = {
     students: [
-      { name: "Kiran", age: 25 },
-      { name: "Kumar", age: 23 },
-      { name: "Kiran Kumar", age: 26 }
-    ]
+      { id: "Student_01", name: "Kiran", age: 25 },
+      { id: "Student_02", name: "Kumar", age: 23 },
+      { id: "Student_03", name: "Kiran Kumar", age: 26 }
+    ],
+    otherState: "old some val",
+    showStudents: false
   };
 
-  nameChangedHandler = event => {
+  // Flexible Lists
+  nameChangedHandler = (event, id) => {
+    const studentIndex = this.state.students.findIndex(stud => {
+      return stud.id === id ? true : false;
+    });
+
+    const student = {
+      ...this.state.students[studentIndex]
+    };
+
+    // const student = Object.assign({}, this.state.students[studentIndex]);
+
+    student.name = event.target.value;
+
+    const students = [...this.state.students];
+    students[studentIndex] = student;
+
     this.setState({
       students: [
         { name: "Kiran K", age: 21 },
@@ -79,18 +97,17 @@ class App extends Component {
       otherState: "some val"
     });
   };
-  switchNameHandler = newName => {
-    // console.log("I was clicked!");
-    // For Class -> setState
-    // For functional -> React Hooks
-    this.setState({
-      students: [
-        { name: newName, age: 23 },
-        { name: "Kumar", age: 20 },
-        { name: "Kiran Kumar", age: 28 }
-      ],
-      otherState: "some val"
-    });
+
+  deleteStudentHandler = studentIndex => {
+    // const students = this.state.students.slice();
+    const students = [...this.state.students];
+    students.splice(studentIndex, 1);
+    this.setState({ students: students });
+  };
+
+  toggleStudentsHandler = () => {
+    const doesShow = this.state.showStudents;
+    this.setState({ showStudents: !doesShow });
   };
 
   render() {
@@ -101,6 +118,43 @@ class App extends Component {
       padding: "8px",
       cursor: "pointer"
     };
+
+    let students = null;
+
+    if (this.state.showStudents) {
+      students = (
+        <div>
+          {this.state.students.map((student, index) => {
+            return (
+              <Student
+                click={() => this.deleteStudentHandler(index)}
+                name={student.name}
+                age={student.age}
+                key={student.id}
+                changed={event => this.nameChangedHandler(event, student.id)}
+              />
+            );
+          })}
+          {/* <Student
+            name={this.state.students[0].name}
+            age={this.state.students[0].age}
+          />
+          <Student
+            name={this.state.students[1].name}
+            age={this.state.students[1].age}
+            // click={this.switchNameHandler.bind(this, "Kiran!")}
+            changed={this.nameChangedHandler}
+          >
+            My Fav subject is Math
+          </Student>
+          <Student
+            name={this.state.students[2].name}
+            age={this.state.students[2].age}
+          /> */}
+          <p> True Hence rendering this paragraph </p>{" "}
+        </div>
+      );
+    }
     // Kind of JSX file
     return (
       // Wrap all elements into 1 root element
@@ -108,29 +162,35 @@ class App extends Component {
       <div className="App">
         <h1>Kiran's first react page after a long time.</h1>
         From App.js file. <br /> <br />
-        <button
-          style={style}
-          onClick={this.switchNameHandler.bind(this, "Kiran-")}
-        >
-          {/* <button onClick={() => this.switchNameHandler('Kiran*')}> */}
-          Switch Student
+        {/* <button style={style} onClick={this.switchNameHandler.bind(this, "Kiran-")}> */}
+        <button style={style} onClick={this.toggleStudentsHandler}>
+          Toggle Students
         </button>
-        <Student
-          name={this.state.students[0].name}
-          age={this.state.students[0].age}
-        />
-        <Student
-          name={this.state.students[1].name}
-          age={this.state.students[1].age}
-          click={this.switchNameHandler.bind(this, "Kiran!")}
-          changed={this.nameChangedHandler}
-        >
-          My Fav subject is Math
-        </Student>
-        <Student
-          name={this.state.students[2].name}
-          age={this.state.students[2].age}
-        />
+        {students}
+        {/* <button onClick={() => this.switchNameHandler('Kiran*')}> </button> */}
+        {/* Ternary Condition
+        {this.state.showStudents === true ? (
+          <div>
+            <Student
+              name={this.state.students[0].name}
+              age={this.state.students[0].age}
+            />
+            <Student
+              name={this.state.students[1].name}
+              age={this.state.students[1].age}
+              click={this.switchNameHandler.bind(this, "Kiran!")}
+              changed={this.nameChangedHandler}
+            >
+              My Fav subject is Math
+            </Student>
+            <Student
+              name={this.state.students[2].name}
+              age={this.state.students[2].age}
+            />
+            <p> True Hence rendering this paragraph </p>{" "}
+          </div>
+        ) : null}
+        */}
       </div>
     );
     // return React.createElement("div", { className: "App" }, React.createElement("h1", null, "Does this work now?"));
