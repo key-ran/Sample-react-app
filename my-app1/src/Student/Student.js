@@ -1,11 +1,17 @@
 import React from "react";
+import Radium from "radium";
 import "./Student.css";
 
 // Component returns a JSX
 // props = dynamic data
 const student = props => {
+  const style = {
+    "@media (min-width: 500px)": {
+      width: "450px"
+    }
+  };
   return (
-    <div className="Student">
+    <div className="Student" style={style}>
       <p onClick={props.click}>
         I'm {props.name} and I'm {props.age} years old!
       </p>
@@ -15,4 +21,4 @@ const student = props => {
   );
 };
 
-export default student;
+export default Radium(student);

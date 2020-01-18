@@ -1,5 +1,6 @@
 import React, { /*useState ,*/ Component } from "react";
 import "./App.css";
+import Radium, { StyleRoot } from "radium";
 import Student from "./Student/Student"; // Component to be used
 
 // const App = props => {
@@ -112,11 +113,16 @@ class App extends Component {
 
   render() {
     const style = {
-      backgroundColor: "White",
+      backgroundColor: "green",
+      color: "white",
       font: "inherit",
       border: "1px solid blue",
       padding: "8px",
-      cursor: "pointer"
+      cursor: "pointer",
+      ":hover": {
+        backgroundColor: "lightgreen",
+        color: "black"
+      }
     };
 
     let students = null;
@@ -154,21 +160,34 @@ class App extends Component {
           <p> True Hence rendering this paragraph </p>{" "}
         </div>
       );
+      style.backgroundColor = "red";
+      style[":hover"] = {
+        backgroundColor: "salmon",
+        color: "black"
+      };
+    }
+    const classes = [];
+    if (this.state.students.length <= 2) {
+      classes.push("red"); // classes = ['red']
+    }
+    if (this.state.students.length <= 1) {
+      classes.push("bold"); // classes = ['red', 'bold']
     }
     // Kind of JSX file
     return (
-      // Wrap all elements into 1 root element
-      // Pass method as props
-      <div className="App">
-        <h1>Kiran's first react page after a long time.</h1>
-        From App.js file. <br /> <br />
-        {/* <button style={style} onClick={this.switchNameHandler.bind(this, "Kiran-")}> */}
-        <button style={style} onClick={this.toggleStudentsHandler}>
-          Toggle Students
-        </button>
-        {students}
-        {/* <button onClick={() => this.switchNameHandler('Kiran*')}> </button> */}
-        {/* Ternary Condition
+      <StyleRoot>
+        {/* // Wrap all elements into 1 root element // Pass method as props */}
+        <div className="App">
+          <h1>Kiran's first react page after a long time.</h1>
+          From App.js file. <br /> <br />
+          <p className={classes.join(" ")}>Title Paragraph</p>
+          {/* <button style={style} onClick={this.switchNameHandler.bind(this, "Kiran-")}> */}
+          <button style={style} onClick={this.toggleStudentsHandler}>
+            Toggle Students
+          </button>
+          {students}
+          {/* <button onClick={() => this.switchNameHandler('Kiran*')}> </button> */}
+          {/* Ternary Condition
         {this.state.showStudents === true ? (
           <div>
             <Student
@@ -191,10 +210,11 @@ class App extends Component {
           </div>
         ) : null}
         */}
-      </div>
+        </div>
+      </StyleRoot>
     );
     // return React.createElement("div", { className: "App" }, React.createElement("h1", null, "Does this work now?"));
   }
 }
 
-export default App;
+export default Radium(App);
