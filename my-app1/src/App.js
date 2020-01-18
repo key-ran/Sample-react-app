@@ -1,64 +1,21 @@
 import React, { /*useState ,*/ Component } from "react";
+import styled from "styled-components";
 import "./App.css";
-import Radium, { StyleRoot } from "radium";
 import Student from "./Student/Student"; // Component to be used
 
-// const App = props => {
-//   // returns 2 elements - current state and function to update state
-//   const [studentsState, setStudentsState] = useState({
-//     students: [
-//       { name: "Kiran", age: 25 },
-//       { name: "Kumar", age: 23 },
-//       { name: "Kiran Kumar", age: 26 }
-//     ],
-//     // replaces the new state instead of merge
-//     otherState: "some val"
-//   });
+const StyledButton = styled.button`
+  background-color: ${props => (props.alt ? "red" : "green")};
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
 
-//   const [otherState, setOtherState] = useState("some other value");
-//   console.log(studentsState, otherState);
-
-//   const switchNameHandler = () => {
-//     // console.log("I was clicked!");
-//     // For Class -> setState
-//     // For functional -> React Hooks
-//     setStudentsState({
-//       students: [
-//         { name: "Kiran", age: 23 },
-//         { name: "Kumar", age: 20 },
-//         { name: "Kiran Kumar", age: 28 }
-//       ],
-//       otherState: studentsState.otherState
-//     });
-//   };
-
-//   return (
-//     // Wrap all elements into 1 root element
-//     <div className="App">
-//       <h1>Kiran's first react page after a long time.</h1>
-//       From App.js file. <br /> <br />
-//       <button onClick={switchNameHandler}>Switch Student</button>
-//       <Student
-//         name={studentsState.students[0].name}
-//         age={studentsState.students[0].age}
-//       />
-//       <Student
-//         name={studentsState.students[1].name}
-//         age={studentsState.students[1].age}
-//       >
-//         My Fav subject is Math
-//       </Student>
-//       <Student
-//         name={studentsState.students[2].name}
-//         age={studentsState.students[2].age}
-//       />
-//     </div>
-//   );
-//   // return React.createElement("div", { className: "App" }, React.createElement("h1", null, "Does this work now?"));
-// };
-
-// export default App;
-
+  &:hover {
+    background-color: ${props => (props.alt ? "salmon" : "lightgreen")};
+    color: black;
+  }
+`;
 class App extends Component {
   // special property can be used if extends Component = state
   // if state changes, DOM is re-rendered.
@@ -112,19 +69,6 @@ class App extends Component {
   };
 
   render() {
-    const style = {
-      backgroundColor: "green",
-      color: "white",
-      font: "inherit",
-      border: "1px solid blue",
-      padding: "8px",
-      cursor: "pointer",
-      ":hover": {
-        backgroundColor: "lightgreen",
-        color: "black"
-      }
-    };
-
     let students = null;
 
     if (this.state.showStudents) {
@@ -141,30 +85,9 @@ class App extends Component {
               />
             );
           })}
-          {/* <Student
-            name={this.state.students[0].name}
-            age={this.state.students[0].age}
-          />
-          <Student
-            name={this.state.students[1].name}
-            age={this.state.students[1].age}
-            // click={this.switchNameHandler.bind(this, "Kiran!")}
-            changed={this.nameChangedHandler}
-          >
-            My Fav subject is Math
-          </Student>
-          <Student
-            name={this.state.students[2].name}
-            age={this.state.students[2].age}
-          /> */}
           <p> True Hence rendering this paragraph </p>{" "}
         </div>
       );
-      style.backgroundColor = "red";
-      style[":hover"] = {
-        backgroundColor: "salmon",
-        color: "black"
-      };
     }
     const classes = [];
     if (this.state.students.length <= 2) {
@@ -175,46 +98,22 @@ class App extends Component {
     }
     // Kind of JSX file
     return (
-      <StyleRoot>
-        {/* // Wrap all elements into 1 root element // Pass method as props */}
-        <div className="App">
-          <h1>Kiran's first react page after a long time.</h1>
-          From App.js file. <br /> <br />
-          <p className={classes.join(" ")}>Title Paragraph</p>
-          {/* <button style={style} onClick={this.switchNameHandler.bind(this, "Kiran-")}> */}
-          <button style={style} onClick={this.toggleStudentsHandler}>
-            Toggle Students
-          </button>
-          {students}
-          {/* <button onClick={() => this.switchNameHandler('Kiran*')}> </button> */}
-          {/* Ternary Condition
-        {this.state.showStudents === true ? (
-          <div>
-            <Student
-              name={this.state.students[0].name}
-              age={this.state.students[0].age}
-            />
-            <Student
-              name={this.state.students[1].name}
-              age={this.state.students[1].age}
-              click={this.switchNameHandler.bind(this, "Kiran!")}
-              changed={this.nameChangedHandler}
-            >
-              My Fav subject is Math
-            </Student>
-            <Student
-              name={this.state.students[2].name}
-              age={this.state.students[2].age}
-            />
-            <p> True Hence rendering this paragraph </p>{" "}
-          </div>
-        ) : null}
-        */}
-        </div>
-      </StyleRoot>
+      // Wrap all elements into 1 root element // Pass method as props */
+      <div className="App">
+        <h1>Kiran's first react page after a long time.</h1>
+        From App.js file. <br /> <br />
+        <p className={classes.join(" ")}>Title Paragraph</p>
+        <StyledButton
+          alt={this.state.showStudents}
+          onClick={this.toggleStudentsHandler}
+        >
+          Toggle Students
+        </StyledButton>
+        {students}
+      </div>
     );
     // return React.createElement("div", { className: "App" }, React.createElement("h1", null, "Does this work now?"));
   }
 }
 
-export default Radium(App);
+export default App;
